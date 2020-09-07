@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/salvar"
+        android:orderInCategory="100"
+        android:title="Salvar"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/carregar"
+        android:orderInCategory="100"
+        android:title="Carregar"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/limpar"
+        android:orderInCategory="100"
+        android:title="Limpar lista"
+        app:showAsAction="never" />
+</menu>

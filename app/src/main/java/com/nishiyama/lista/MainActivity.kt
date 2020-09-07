@@ -1,0 +1,95 @@
+package com.nishiyama.lista
+
+import android.content.Context
+import android.os.Bundle
+import android.view.Gravity
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import kotlinx.android.synthetic.main.activity_main.*
+import java.lang.reflect.Type
+
+
+val listen : MutableLiveData<Double> =  MutableLiveData<Double>()
+
+class MainActivity : AppCompatActivity() {
+    var recyclerView: RecyclerView? = null
+    var lista = ArrayList<ListaController>()
+    var adapter = ListaAdapter(this, lista)
+    var total: Double = 0.00
+
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.salvar -> {
+                adapter.saveList()
+                ShowTost(this,"Lista salva!")
+                true
+            }
+            R.id.carregar -> {
+                lista.clear()
+                adapter.loadList()
+                adapter.notifyDataSetChanged()
+                ShowTost(this,"Lista carregada!")
+                true
+            }
+            R.id.limpar -> {
+                lista.clear()
+                valTotal.text = "0,00"
+                adapter.notifyDataSetChanged()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val rvRecyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        rvRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+
+        rvRecyclerView.adapter = adapter
+
+
+
+        button6.setOnClickListener {
+            if (edit1.text.isNotBlank()) {
+                lista.add(ListaController(edit1.text.toString(), 0.00,false))
+                adapter.notifyDataSetChanged()
+                edit1.setText("")
+            }
+        }
+
+        listen.observe(this, Observer {
+            total += listen.value!!.toDouble()
+            if (total < 0) {
+                total = 0.0
+            }
+            valTotal.text = String.format("%.2f", total)
+
+
+        })
+
+    }
+    fun ShowTost(context: Context?, ToastMessage: String?) {
+        val toast = Toast.makeText(context, ToastMessage, Toast.LENGTH_SHORT)
+        toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0)
+        toast.show()
+    }
+
+}
+
