@@ -6,12 +6,13 @@ import android.content.DialogInterface
 import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.inflate
 import android.view.ViewGroup
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.TextView
+import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.res.ColorStateListInflaterCompat.inflate
 import androidx.recyclerview.widget.RecyclerView
+import org.w3c.dom.Text
 
 
 class ListaAdapter(val context : Context, val ListaList: ArrayList<ListaController>) : RecyclerView.Adapter<ListaAdapter.ViewHolder>(){
@@ -23,6 +24,8 @@ class ListaAdapter(val context : Context, val ListaList: ArrayList<ListaControll
     override fun onBindViewHolder(holder: ListaAdapter.ViewHolder, position: Int) {
         holder?.chkb?.text = ListaList[position].name.capitalize()
         holder?.chkb?.isChecked = ListaList[position].chkd
+        holder?.quantidade?.text = ListaList[position].quantidade.toString()
+        holder?.vtot?.text = String.format("%.2f", (ListaList[position].valor * ListaList[position].quantidade))
         holder?.valo?.text = String.format("%.2f", ListaList[position].valor)
         holder?.lItem?.setOnLongClickListener(View.OnLongClickListener { view ->
             val builder: AlertDialog.Builder = AlertDialog.Builder(context)
@@ -31,7 +34,7 @@ class ListaAdapter(val context : Context, val ListaList: ArrayList<ListaControll
             builder.setPositiveButton("Sim",
                 DialogInterface.OnClickListener { dialog, which ->
                     if(ListaList[position].chkd) {
-                        listen.value = -(ListaList[position].valor)
+                        listen.value = -(ListaList[position].valor * ListaList[position].quantidade)
                     }
 
                     ListaList.removeAt(position)
@@ -53,9 +56,14 @@ class ListaAdapter(val context : Context, val ListaList: ArrayList<ListaControll
                     val builder: AlertDialog.Builder = AlertDialog.Builder(context)
                     builder.setTitle("Insira o preço")
 
-                    val input = EditText(context)
+                    val customLayout: View = LayoutInflater.from(context).inflate(R.layout.dpreco, null)
+                    val npick: NumberPicker = customLayout.findViewById(R.id.numberpick1)
+                    val input: EditText = customLayout.findViewById(R.id.editText)
                     input.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
-                    builder.setView(input)
+                    npick.setMaxValue(99);
+                    npick.setMinValue(1);
+                    builder.setView(customLayout)
+
 
                     builder.setOnCancelListener(DialogInterface.OnCancelListener {
                         view.isChecked = false
@@ -64,20 +72,23 @@ class ListaAdapter(val context : Context, val ListaList: ArrayList<ListaControll
                     builder.setPositiveButton("Inserir",
                         DialogInterface.OnClickListener { dialog, which ->
                             if(input.text.toString() != "") {
+                                ListaList[position].quantidade = npick.value
                                 ListaList[position].valor = input.text.toString().toDouble()
                             } else {
                                 ListaList[position].valor = 0.00
+                                ListaList[position].quantidade = 0
+                                dialog.cancel()
                             }
                             ListaList[position].chkd = true
-                            listen.value = ListaList[position].valor
-                            notifyDataSetChanged()
+                            listen.value = (ListaList[position].valor * ListaList[position].quantidade)
+                            notifyItemRangeChanged(0, ListaList.size);
 
                         })
                     builder.setNeutralButton("Usar anterior",
                         DialogInterface.OnClickListener { dialog, which ->
                             ListaList[position].chkd = true
-                            listen.value = ListaList[position].valor
-                            notifyDataSetChanged()
+                            listen.value = (ListaList[position].valor * ListaList[position].quantidade)
+                            notifyItemRangeChanged(0, ListaList.size);
 
                         })
                     builder.setNegativeButton("Cancelar",
@@ -88,7 +99,7 @@ class ListaAdapter(val context : Context, val ListaList: ArrayList<ListaControll
                 } else {
                     if(!view.isChecked) {
                         ListaList[position].chkd = false
-                        listen.value = -(ListaList[position].valor)
+                        listen.value = -(ListaList[position].valor * ListaList[position].quantidade)
                     }
                 }
             }
@@ -102,14 +113,20 @@ class ListaAdapter(val context : Context, val ListaList: ArrayList<ListaControll
             dataProccessor.setStr("nome${j}", ListaList[j].name )
             dataProccessor.setStr("valor${j}", ListaList[j].valor.toString() )
             dataProccessor.setBool("ch${j}", ListaList[j].chkd)
+            dataProccessor.setInt("qtd${j}", ListaList[j].quantidade)
         }
     }
 
     public fun loadList() {
         val dataProccessor = DataProcess(context)
         for(j in 0 until dataProccessor.getSize()){
-            ListaList.add(ListaController(dataProccessor.getStr("nome${j}")!!,dataProccessor.getStr("valor${j}")!!.toDouble(),dataProccessor.getBool("ch${j}")))
+            ListaList.add(ListaController(dataProccessor.getStr("nome${j}")!!,dataProccessor.getStr("valor${j}")!!.toDouble(),dataProccessor.getBool("ch${j}"),dataProccessor.getInt("qtd${j}")))
         }
+    }
+    public fun loadPreco() {
+        for((j, i) in ListaList.withIndex())
+            if (ListaList[j].chkd)
+                listen.value = (ListaList[j].valor * ListaList[j].quantidade)
     }
 
     override fun getItemCount(): Int {
@@ -120,5 +137,7 @@ class ListaAdapter(val context : Context, val ListaList: ArrayList<ListaControll
         val chkb = itemView.findViewById<CheckBox>(R.id.checkBox)
         val valo = itemView.findViewById<TextView>(R.id.textView2)
         val lItem = itemView.findViewById<ConstraintLayout>(R.id.Litem)
+        val quantidade = itemView.findViewById<TextView>(R.id.textView8)
+        val vtot = itemView.findViewById<TextView>(R.id.textView4)
     }
 }

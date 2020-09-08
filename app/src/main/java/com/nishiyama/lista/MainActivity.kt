@@ -2,19 +2,15 @@ package com.nishiyama.lista
 
 import android.content.Context
 import android.os.Bundle
-import android.view.Gravity
-import android.view.Menu
-import android.view.MenuItem
+import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import com.google.android.material.bottomappbar.BottomAppBar
 import kotlinx.android.synthetic.main.activity_main.*
-import java.lang.reflect.Type
 
 
 val listen : MutableLiveData<Double> =  MutableLiveData<Double>()
@@ -41,7 +37,9 @@ class MainActivity : AppCompatActivity() {
             R.id.carregar -> {
                 lista.clear()
                 adapter.loadList()
-                adapter.notifyDataSetChanged()
+                total = 0.0
+                adapter.loadPreco()
+                adapter.notifyItemRangeChanged(0, lista.size);
                 ShowTost(this,"Lista carregada!")
                 true
             }
@@ -67,12 +65,15 @@ class MainActivity : AppCompatActivity() {
 
 
         button6.setOnClickListener {
-            if (edit1.text.isNotBlank()) {
-                lista.add(ListaController(edit1.text.toString(), 0.00,false))
-                adapter.notifyDataSetChanged()
-                edit1.setText("")
-            }
+            addLista()
         }
+        edit1.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
+                addLista()
+                return@OnKeyListener true
+            }
+            false
+        })
 
         listen.observe(this, Observer {
             total += listen.value!!.toDouble()
@@ -90,6 +91,12 @@ class MainActivity : AppCompatActivity() {
         toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0)
         toast.show()
     }
-
+    fun addLista() {
+        if (edit1.text.isNotBlank()) {
+            lista.add(ListaController(edit1.text.toString(), 0.00,false,0))
+            adapter.notifyItemInserted(lista.size - 1)
+            edit1.setText("")
+        }
+    }
 }
 

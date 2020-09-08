@@ -51,7 +51,7 @@ class DataProcess(context: Context) {
     fun getSize(): Int {
         val sharedPref: SharedPreferences =
             context.getSharedPreferences(PREFS_NAME, 0)
-        return (sharedPref.all.size) / 3
+        return (sharedPref.all.size) / 4
     }
 
     fun clean() {
