@@ -9,7 +9,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomappbar.BottomAppBar
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -20,7 +19,6 @@ class MainActivity : AppCompatActivity() {
     var lista = ArrayList<ListaController>()
     var adapter = ListaAdapter(this, lista)
     var total: Double = 0.00
-
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
@@ -58,11 +56,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val rvRecyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+
         rvRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-
         rvRecyclerView.adapter = adapter
-
-
 
         button6.setOnClickListener {
             addLista()
@@ -84,8 +80,8 @@ class MainActivity : AppCompatActivity() {
 
 
         })
-
     }
+
     fun ShowTost(context: Context?, ToastMessage: String?) {
         val toast = Toast.makeText(context, ToastMessage, Toast.LENGTH_SHORT)
         toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0)

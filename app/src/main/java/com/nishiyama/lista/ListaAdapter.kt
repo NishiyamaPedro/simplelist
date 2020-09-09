@@ -3,17 +3,15 @@ package com.nishiyama.lista
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.os.Bundle
+import android.os.PersistableBundle
 import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.inflate
 import android.view.ViewGroup
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.res.ColorStateListInflaterCompat.inflate
 import androidx.recyclerview.widget.RecyclerView
-import org.w3c.dom.Text
-
 
 class ListaAdapter(val context : Context, val ListaList: ArrayList<ListaController>) : RecyclerView.Adapter<ListaAdapter.ViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListaAdapter.ViewHolder {
