@@ -1,11 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:textColor="@android:color/black">
 
     <item
         android:id="@+id/salvar"
         android:orderInCategory="100"
-        android:title="Salvar"
-        app:showAsAction="never" />
+        android:title="Salvar" />
     <item
         android:id="@+id/carregar"
         android:orderInCategory="100"

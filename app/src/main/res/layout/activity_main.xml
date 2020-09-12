@@ -2,49 +2,68 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:backgroundTint="#FFFFFF"
+    android:fitsSystemWindows="true"
     android:scrollbarAlwaysDrawVerticalTrack="true"
     android:scrollbarSize="10dp"
     android:scrollbarStyle="outsideOverlay"
     android:scrollbars="vertical"
-    tools:context=".MainActivity"
-    android:fitsSystemWindows="true">
+    tools:context=".MainActivity">
 
 
-    <Button
-        android:id="@+id/button6"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:shadowColor="#FFFFFF"
-        android:text="Adicionar"
-        android:textColor="@color/primaryTextColor"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="@color/primaryDarkColor"
+        android:backgroundTintMode="add"
+        app:backgroundTint="@color/primaryDarkColor"
+        app:fabCustomSize="50dp"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="@+id/coordinatorLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/edit1" />
-
-    <EditText
-        android:id="@+id/edit1"
-        style="@android:style/Widget.DeviceDefault.EditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:inputType="text"
-        android:textColorHighlight="@android:color/holo_blue_light"
-        app:layout_constraintEnd_toStartOf="@+id/button6"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:maxImageSize="24dp"
+        app:srcCompat="@drawable/ic_baseline_add_24" />
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="false"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.bottomappbar.BottomAppBar
+            android:id="@+id/bottomAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            app:backgroundTint="@color/primaryColor"
+            app:fabAlignmentMode="end"
+            app:fabCradleMargin="0dp"
+            app:fabCradleRoundedCornerRadius="0dp"
+            app:fabCradleVerticalOffset="0dp"
+            app:hideOnScroll="false"
+            app:menu="@menu/menu" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="75dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        android:layout_marginTop="80dp"
+        android:background="@android:color/transparent"
+        android:overScrollMode="never"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/coordinatorLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,42 +71,77 @@
 
     </androidx.recyclerview.widget.RecyclerView>
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        style="@style/Theme.AppCompat.DayNight.DarkActionBar"
-        android:layout_width="match_parent"
+    <include
+        android:id="@+id/input"
+        layout="@layout/input"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/primaryColor"
-        android:orientation="horizontal"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:layout_weight="2"
-            android:text="Total:"
-            android:textColor="@color/primaryTextColor"
-            android:textSize="24sp" />
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="17dp"
+        android:text="Minha lista"
+        android:textSize="36sp"
+        android:typeface="serif"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <TextView
-            android:id="@+id/valTotal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:layout_weight="2"
-            android:text="0,00"
-            android:textAlignment="textEnd"
-            android:textColor="@color/primaryTextColor"
-            android:textSize="24sp" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="22dp"
+        android:text="Total:"
+        android:textAlignment="textEnd"
+        android:textSize="18sp"
+        android:typeface="serif"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
+        app:layout_constraintEnd_toStartOf="@+id/valTotal2" />
+
+    <TextView
+        android:id="@+id/valTotal2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="22dp"
+        android:layout_weight="2"
+        android:width="50dp"
+        android:maxWidth="50dp"
+        android:ellipsize="end"
+        android:lines="1"
+        android:text="0,00"
+        android:textAlignment="textEnd"
+        android:textSize="18sp"
+        android:typeface="serif"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_baseline_add_shopping_cart_24" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Toque no + para adicionar produtos na lista"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
